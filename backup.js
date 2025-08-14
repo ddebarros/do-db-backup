@@ -246,6 +246,68 @@ program
     }
   });
 
+program
+  .command("wait")
+  .description(
+    "Wait for specified number of minutes then exit with success message"
+  )
+  .argument("[minutes]", "Number of minutes to wait (default: 5)")
+  .action(async (minutes = 5) => {
+    const waitMinutes = parseInt(minutes);
+
+    if (isNaN(waitMinutes) || waitMinutes <= 0) {
+      console.error(
+        "❌ Invalid time specified. Please provide a positive number of minutes."
+      );
+      process.exit(1);
+    }
+
+    console.log(`⏰ Starting ${waitMinutes}-minute wait timer...`);
+    console.log(
+      `🕐 This command will wait for ${waitMinutes} minute(s) before completing`
+    );
+
+    const waitTime = waitMinutes * 60 * 1000; // Convert minutes to milliseconds
+    const startTime = Date.now();
+
+    // Show progress every 15 seconds
+    const progressInterval = 15000; // 15 seconds in milliseconds
+
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const remaining = Math.floor(waitTime / 1000 - elapsed);
+      const elapsedMinutes = Math.floor(elapsed / 60);
+      const remainingMinutes = Math.floor(remaining / 60);
+
+      if (waitMinutes >= 2) {
+        console.log(
+          `⏳ Time elapsed: ${elapsedMinutes}m ${
+            elapsed % 60
+          }s, Remaining: ${remainingMinutes}m ${remaining % 60}s`
+        );
+      } else {
+        console.log(`⏳ Time elapsed: ${elapsed}s, Remaining: ${remaining}s`);
+      }
+    }, progressInterval);
+
+    try {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          clearInterval(interval);
+          resolve();
+        }, waitTime);
+      });
+
+      console.log(
+        `✅ Wait command completed successfully after ${waitMinutes} minute(s)!`
+      );
+      console.log("🎯 Task finished with success status");
+    } catch (error) {
+      console.error("❌ Wait command failed:", error.message);
+      process.exit(1);
+    }
+  });
+
 // Parse command line arguments
 program.parse(process.argv);
 

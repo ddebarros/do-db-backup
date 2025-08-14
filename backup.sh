@@ -82,19 +82,23 @@ install_dependencies() {
 show_usage() {
     echo "Usage: $0 [COMMAND]"
     echo ""
-    echo "Commands:"
-    echo "  backup          Create a new database backup (default)"
-    echo "  test            Test database connection"
-    echo "  list            List existing backups"
-    echo "  backup-with-test Test connection and create backup"
-    echo "  install         Install Node.js dependencies"
-    echo "  help            Show this help message"
+      echo "Commands:"
+  echo "  backup          Create a new database backup (default)"
+  echo "  test            Test database connection"
+  echo "  list            List existing backups"
+  echo "  backup-with-test Test connection and create backup"
+  echo "  wait [minutes]  Wait for specified minutes then exit with success"
+  echo "  install         Install Node.js dependencies"
+  echo "  help            Show this help message"
     echo ""
-    echo "Examples:"
-    echo "  $0                    # Create backup"
-    echo "  $0 test              # Test connection"
-    echo "  $0 list              # List backups"
-    echo "  $0 backup-with-test  # Test and backup"
+      echo "Examples:"
+  echo "  $0                    # Create backup"
+  echo "  $0 test              # Test connection"
+  echo "  $0 list              # List backups"
+  echo "  $0 backup-with-test  # Test and backup"
+  echo "  $0 wait              # Wait 5 minutes (default)"
+  echo "  $0 wait 10           # Wait 10 minutes"
+  echo "  $0 wait 2            # Wait 2 minutes"
 }
 
 # Main script logic
@@ -106,7 +110,7 @@ main() {
             check_prerequisites
             install_dependencies
             ;;
-        "backup"|"test"|"list"|"backup-with-test")
+        "backup"|"test"|"list"|"backup-with-test"|"wait")
             check_prerequisites
             install_dependencies
             print_status "Running: node backup.js $command"
