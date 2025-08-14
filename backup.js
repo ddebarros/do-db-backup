@@ -8,6 +8,8 @@ const { program } = require("commander");
 const moment = require("moment");
 require("dotenv").config();
 
+process.env.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE = "1";
+
 // Configure AWS SDK for DigitalOcean Spaces
 const spacesEndpoint = new AWS.Endpoint(
   process.env.SPACES_ENDPOINT || "nyc3.digitaloceanspaces.com"

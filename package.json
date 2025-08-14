@@ -4,10 +4,11 @@
     "description": "Backup DigitalOcean PostgreSQL database to Spaces bucket",
     "main": "backup.js",
     "scripts": {
-        "start": "node backup.js",
-        "backup": "node backup.js",
-        "test": "node backup.js test",
-        "list": "node backup.js list",
+        "start": "node --no-warnings backup.js",
+        "backup": "node --no-warnings backup.js",
+        "test": "node --no-warnings backup.js test",
+        "list": "node --no-warnings backup.js list",
+        "wait": "node --no-warnings backup.js wait",
         "validate": "node validate-config.js",
         "validate-config": "node validate-config.js"
     },

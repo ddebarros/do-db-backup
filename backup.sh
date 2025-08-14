@@ -113,9 +113,9 @@ main() {
         "backup"|"test"|"list"|"backup-with-test"|"wait")
             check_prerequisites
             install_dependencies
-            print_status "Running: node backup.js $command"
+            print_status "Running: node --no-warnings backup.js $command"
             cd "$SCRIPT_DIR"
-            node backup.js "$command"
+            node --no-warnings backup.js "$command"
             ;;
         "help"|"--help"|"-h")
             show_usage
