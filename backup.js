@@ -256,12 +256,20 @@ program
   .argument("[minutes]", "Number of minutes to wait (default: 5)")
   .argument("[interval]", "Progress update interval in seconds (default: 5)")
   .action(async (minutes = 5, interval = 5) => {
-    const waitMinutes = parseInt(minutes);
+    const waitMinutes = parseFloat(minutes);
     const progressIntervalSeconds = parseInt(interval);
 
     if (isNaN(waitMinutes) || waitMinutes <= 0) {
       console.error(
         "❌ Invalid time specified. Please provide a positive number of minutes."
+      );
+      process.exit(1);
+    }
+
+    // Allow decimal minutes for testing purposes
+    if (waitMinutes < 0.01) {
+      console.error(
+        "❌ Time too short. Minimum wait time is 0.01 minutes (0.6 seconds)."
       );
       process.exit(1);
     }
@@ -286,9 +294,11 @@ program
     console.log(
       `📊 Progress updates every ${progressIntervalSeconds} second(s)`
     );
-    
+
     // Show estimated number of progress updates
-    const estimatedUpdates = Math.floor((waitMinutes * 60) / progressIntervalSeconds);
+    const estimatedUpdates = Math.floor(
+      (waitMinutes * 60) / progressIntervalSeconds
+    );
     console.log(`📈 Expected progress updates: ~${estimatedUpdates}`);
 
     const waitTime = waitMinutes * 60 * 1000; // Convert minutes to milliseconds
@@ -297,7 +307,7 @@ program
     // Show progress at specified interval
     const progressInterval = progressIntervalSeconds * 1000; // Convert seconds to milliseconds
 
-    const interval = setInterval(() => {
+    const progressTimer = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const remaining = Math.floor(waitTime / 1000 - elapsed);
       const elapsedMinutes = Math.floor(elapsed / 60);
@@ -317,7 +327,7 @@ program
     try {
       await new Promise((resolve) => {
         setTimeout(() => {
-          clearInterval(interval);
+          clearInterval(progressTimer);
           resolve();
         }, waitTime);
       });
