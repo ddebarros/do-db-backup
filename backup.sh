@@ -87,7 +87,7 @@ show_usage() {
   echo "  test            Test database connection"
   echo "  list            List existing backups"
   echo "  backup-with-test Test connection and create backup"
-  echo "  wait [minutes]  Wait for specified minutes then exit with success"
+  echo "  wait [minutes] [interval]  Wait for specified minutes with progress updates every N seconds"
   echo "  install         Install Node.js dependencies"
   echo "  help            Show this help message"
     echo ""
@@ -96,9 +96,11 @@ show_usage() {
   echo "  $0 test              # Test connection"
   echo "  $0 list              # List backups"
   echo "  $0 backup-with-test  # Test and backup"
-  echo "  $0 wait              # Wait 5 minutes (default)"
-  echo "  $0 wait 10           # Wait 10 minutes"
-  echo "  $0 wait 2            # Wait 2 minutes"
+  echo "  $0 wait              # Wait 5 minutes with 5s updates (default)"
+  echo "  $0 wait 10           # Wait 10 minutes with 5s updates"
+  echo "  $0 wait 2            # Wait 2 minutes with 5s updates"
+  echo "  $0 wait 5 10         # Wait 5 minutes with 10s updates"
+  echo "  $0 wait 10 30        # Wait 10 minutes with 30s updates"
 }
 
 # Main script logic

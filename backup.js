@@ -254,8 +254,10 @@ program
     "Wait for specified number of minutes then exit with success message"
   )
   .argument("[minutes]", "Number of minutes to wait (default: 5)")
-  .action(async (minutes = 5) => {
+  .argument("[interval]", "Progress update interval in seconds (default: 5)")
+  .action(async (minutes = 5, interval = 5) => {
     const waitMinutes = parseInt(minutes);
+    const progressIntervalSeconds = parseInt(interval);
 
     if (isNaN(waitMinutes) || waitMinutes <= 0) {
       console.error(
@@ -264,16 +266,36 @@ program
       process.exit(1);
     }
 
+    if (isNaN(progressIntervalSeconds) || progressIntervalSeconds <= 0) {
+      console.error(
+        "❌ Invalid interval specified. Please provide a positive number of seconds."
+      );
+      process.exit(1);
+    }
+
+    // Ensure interval isn't longer than the wait time
+    if (progressIntervalSeconds > waitMinutes * 60) {
+      console.error("❌ Interval cannot be longer than the total wait time.");
+      process.exit(1);
+    }
+
     console.log(`⏰ Starting ${waitMinutes}-minute wait timer...`);
     console.log(
       `🕐 This command will wait for ${waitMinutes} minute(s) before completing`
     );
+    console.log(
+      `📊 Progress updates every ${progressIntervalSeconds} second(s)`
+    );
+    
+    // Show estimated number of progress updates
+    const estimatedUpdates = Math.floor((waitMinutes * 60) / progressIntervalSeconds);
+    console.log(`📈 Expected progress updates: ~${estimatedUpdates}`);
 
     const waitTime = waitMinutes * 60 * 1000; // Convert minutes to milliseconds
     const startTime = Date.now();
 
-    // Show progress every 15 seconds
-    const progressInterval = 15000; // 15 seconds in milliseconds
+    // Show progress at specified interval
+    const progressInterval = progressIntervalSeconds * 1000; // Convert seconds to milliseconds
 
     const interval = setInterval(() => {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);

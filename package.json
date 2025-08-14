@@ -9,6 +9,7 @@
         "test": "node --no-warnings backup.js test",
         "list": "node --no-warnings backup.js list",
         "wait": "node --no-warnings backup.js wait",
+        "wait:test": "node --no-warnings backup.js wait 1 5",
         "validate": "node validate-config.js",
         "validate-config": "node validate-config.js"
     },

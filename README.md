@@ -88,6 +88,11 @@ node backup.js list
 
 # Test connection and create backup
 node backup.js backup-with-test
+
+# Wait for specified time
+node backup.js wait              # Wait 5 minutes with 5s updates (default)
+node backup.js wait 10           # Wait 10 minutes with 5s updates
+node backup.js wait 5 10         # Wait 5 minutes with 10s updates
 ```
 
 ### Command Line Options
