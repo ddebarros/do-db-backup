@@ -4,12 +4,12 @@
     "description": "Backup DigitalOcean PostgreSQL database to Spaces bucket",
     "main": "backup.js",
     "scripts": {
-        "start": "node --no-warnings backup.js",
-        "backup": "node --no-warnings backup.js",
-        "test": "node --no-warnings backup.js test",
-        "list": "node --no-warnings backup.js list",
-        "wait": "node --no-warnings backup.js wait",
-        "wait:test": "node --no-warnings backup.js wait 1 5",
+        "start": "node backup.js",
+        "backup": "node backup.js",
+        "test": "node backup.js test",
+        "list": "node backup.js list",
+        "wait": "node backup.js wait",
+        "wait:test": "node backup.js wait 1 5",
         "validate": "node validate-config.js",
         "validate-config": "node validate-config.js"
     },
@@ -31,5 +31,6 @@
     },
     "devDependencies": {
         "nodemon": "^3.0.3"
-    }
+    },
+    "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

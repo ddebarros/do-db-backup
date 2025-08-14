@@ -295,12 +295,6 @@ program
       `📊 Progress updates every ${progressIntervalSeconds} second(s)`
     );
 
-    // Show estimated number of progress updates
-    const estimatedUpdates = Math.floor(
-      (waitMinutes * 60) / progressIntervalSeconds
-    );
-    console.log(`📈 Expected progress updates: ~${estimatedUpdates}`);
-
     const waitTime = waitMinutes * 60 * 1000; // Convert minutes to milliseconds
     const startTime = Date.now();
 
