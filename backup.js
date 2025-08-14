@@ -255,7 +255,16 @@ program
   )
   .argument("[minutes]", "Number of minutes to wait (default: 5)")
   .argument("[interval]", "Progress update interval in seconds (default: 5)")
-  .action(async (minutes = 5, interval = 5) => {
+  .action(async (minutes = 5, interval = 1) => {
+    // Progress bar function
+    const createProgressBar = (progress, width = 30) => {
+      const filled = Math.floor(progress * width);
+      const empty = width - filled;
+      const bar = "█".repeat(filled) + "░".repeat(empty);
+      const percentage = Math.round(progress * 100);
+      return `[${bar}] ${percentage}%`;
+    };
+
     const waitMinutes = parseFloat(minutes);
     const progressIntervalSeconds = parseInt(interval);
 
@@ -295,6 +304,10 @@ program
       `📊 Progress updates every ${progressIntervalSeconds} second(s)`
     );
 
+    // Show initial progress bar
+    const initialProgressBar = createProgressBar(0);
+    console.log(`⏳ ${initialProgressBar} | Starting...`);
+
     const waitTime = waitMinutes * 60 * 1000; // Convert minutes to milliseconds
     const startTime = Date.now();
 
@@ -306,15 +319,25 @@ program
       const remaining = Math.floor(waitTime / 1000 - elapsed);
       const elapsedMinutes = Math.floor(elapsed / 60);
       const remainingMinutes = Math.floor(remaining / 60);
+      const progress = Math.min(elapsed / (waitTime / 1000), 1);
+
+      // Create progress bar
+      const progressBar = createProgressBar(progress);
 
       if (waitMinutes >= 2) {
         console.log(
-          `⏳ Time elapsed: ${elapsedMinutes}m ${
+          `⏳ ${progressBar} | Time: ${elapsedMinutes}m ${
             elapsed % 60
-          }s, Remaining: ${remainingMinutes}m ${remaining % 60}s`
+          }s / ${waitMinutes}m | Remaining: ${remainingMinutes}m ${
+            remaining % 60
+          }s`
         );
       } else {
-        console.log(`⏳ Time elapsed: ${elapsed}s, Remaining: ${remaining}s`);
+        console.log(
+          `⏳ ${progressBar} | Time: ${elapsed}s / ${Math.round(
+            waitMinutes * 60
+          )}s | Remaining: ${remaining}s`
+        );
       }
     }, progressInterval);
 
@@ -325,6 +348,10 @@ program
           resolve();
         }, waitTime);
       });
+
+      // Show final progress bar
+      const finalProgressBar = createProgressBar(1);
+      console.log(`⏳ ${finalProgressBar} | Complete!`);
 
       console.log(
         `✅ Wait command completed successfully after ${waitMinutes} minute(s)!`
