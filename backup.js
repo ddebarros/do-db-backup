@@ -256,13 +256,36 @@ program
   .argument("[minutes]", "Number of minutes to wait (default: 5)")
   .argument("[interval]", "Progress update interval in seconds (default: 5)")
   .action(async (minutes = 5, interval = 1) => {
-    // Progress bar function
+    // Progress bar function with color gradient
     const createProgressBar = (progress, width = 30) => {
       const filled = Math.floor(progress * width);
       const empty = width - filled;
-      const bar = "█".repeat(filled) + "░".repeat(empty);
-      const percentage = Math.round(progress * 100);
-      return `[${bar}] ${percentage}%`;
+
+      // Check if terminal supports colors
+      const supportsColor = process.stdout.isTTY && process.env.TERM !== "dumb";
+
+      if (supportsColor) {
+        // Create color gradient from light green to dark green
+        // Each filled block gets progressively darker green for visual appeal
+        let filledBar = "";
+        for (let i = 0; i < filled; i++) {
+          const intensity = Math.floor((i / filled) * 180);
+          const greenValue = Math.max(100, 255 - intensity);
+          const color = `\x1b[38;2;0;${greenValue};0m`; // Green gradient
+          filledBar += color + "█";
+        }
+
+        const emptyBar = "\x1b[37m░".repeat(empty); // White empty blocks
+        const resetColor = "\x1b[0m";
+        const percentage = Math.round(progress * 100);
+
+        return `[${filledBar}${emptyBar}${resetColor}] ${percentage}%`;
+      } else {
+        // Fallback for terminals without color support
+        const bar = "█".repeat(filled) + "░".repeat(empty);
+        const percentage = Math.round(progress * 100);
+        return `[${bar}] ${percentage}%`;
+      }
     };
 
     const waitMinutes = parseFloat(minutes);
